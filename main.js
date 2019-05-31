@@ -20,7 +20,7 @@ function listenOnNav(e) {
     showNewTask();
   }
   if (e.target === makeListBtn){
-    appendList();
+    handleMakeList(e);
   }
   if (e.target.className === 'nav__img--delete'){
     deleteTask(e);
@@ -35,6 +35,11 @@ function enableBtn(event) {
   }
 }
 
+function clearInputs() {
+  newTaskItem.value = '';
+  newTaskTitle.value = '';
+}
+
 function showNewTask() {
   if (newTaskItem.value !== '' && newTaskTitle.value !== ''){
   var newTask = newTaskItem.value;
@@ -45,15 +50,16 @@ function showNewTask() {
     </article>`;
   newTasksSection.insertAdjacentHTML('afterbegin', newTaskList);
   instantiateTask();
+  clearInputs();
   }
 }
 
-function instantiateTask () {
+function instantiateTask (obj) {
   var taskTitle = newTaskTitle.value;
   var taskToDo = newListArray; 
   var taskId = Date.now();
   var taskUrgency = false;
-  var newTaskObject = ({id: Date.now(), title: newTaskTitle.value, tasks: newListArray, urgent: false});
+  var newTaskObject = (obj);
   newListArray.push(newTaskObject);
   console.log(newListArray)
 }
@@ -65,6 +71,25 @@ function deleteTask(e) {
   task.remove();
 }
 
+function handleMakeList(e){
+  e.preventDefault;
+  instantiateTask({id: Date.now(), title: newTaskTitle.value, tasks: newListArray, urgent: false});
+  clearInputs();
+}
+
+
+function instantiateIdea(obj) {
+  var ideaTitle = obj.title;
+  var ideaBody = obj.body; 
+  var ideaId = obj.id;
+  var ideaStar = obj.star
+  var ideaQuality = obj.quality;
+  //could be obj below
+  idea = new Idea({id: ideaId, title: ideaTitle, body: ideaBody, star: ideaStar, quality: ideaQuality});
+  ideaList.push(idea);
+  idea.saveToStorage(ideaList);
+  appendCard(idea);
+}
 // function appendCard(object) {
 //   var starState = object.star ? 'star-active.svg' : 'star.svg';
 //   var ideaCard = `
