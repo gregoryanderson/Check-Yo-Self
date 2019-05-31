@@ -5,11 +5,13 @@ navWhole = document.querySelector('.nav--whole');
 newTaskTitle = document.querySelector('.nav__input--title');
 makeListBtn = document.querySelector('.nav__btn--list');
 // deleteNewTask = document.querySelector('nav__img--delete')
+mainDisplay = document.querySelector('.card__main')
 newListArray = [];
 
 newTaskItem.addEventListener('keyup', enableBtn);
 newTaskTitle.addEventListener('keyup', enableBtn);
 navWhole.addEventListener('click', listenOnNav);
+mainDisplay.addEventListener('click', listenOnMain)
 
 makeListBtn.disabled = true;
 
@@ -24,6 +26,17 @@ function listenOnNav(e) {
   }
   if (e.target.className === 'nav__img--delete'){
     deleteTask(e);
+  }
+}
+
+function listenOnMain(e) {
+  e.preventDefault();
+  if (e.target.id === 'card__img--delete') {
+  console.log('hey')
+    deleteList(e);
+  }
+  if (e.target.id === 'card__img--urgent') {
+    changeUrgency(e);
   }
 }
 
@@ -49,31 +62,76 @@ function showNewTask() {
       <p class="nav__p--tasks">${newTask}</p
     </article>`;
   newTasksSection.insertAdjacentHTML('afterbegin', newTaskList);
-  instantiateTask();
+  newListArray.push(newTask);
+  console.log(newListArray)
+  // instantiateTask({id: Date.now(), title: newTaskTitle.value, tasks: newListArray, urgent: false});
   clearInputs();
   }
 }
 
+function appendCard(){
+  // newListArray.map(function(task){
+  // appendCard(task)
+  var newList =           
+  `<article class="card__article">
+        <header class="card__header"> 
+          <h2 class="card__h2--title">New Title</h2>
+        </header>
+        <section class="card__section">
+          <div class="card__div">
+            <input type=radio class="card__input--list">
+            <p class="card__p--task">Task One</p>
+          </div>
+          <div class="card__div">
+            <input type=radio class="card__input--list">
+            <p class="card__p--task">Task Two</p>
+          </div>
+        </section>
+        <footer class="card__footer">
+          <section class="card__section--left">
+            <img src="images/urgent.svg" class="card__img card__img--urgent" id="card__img--urgent">
+            <p class="card__p card__p--urgent">Urgent</p>
+          </section>
+          <section class="card__section--right">
+            <img src="images/delete.svg" class="card__img card__img--delete" id="card__img--delete">
+            <p class="card__p card__p--delete">Delete</p>
+          </section>
+        </footer>
+      </article>`
+    mainDisplay.insertAdjacentHTML('afterbegin', newList);
+  // })
+}
+
+
 function instantiateTask (obj) {
+  console.log(obj)
   var taskTitle = newTaskTitle.value;
-  var taskToDo = newListArray; 
+  var taskItem = newTaskItem.value;
   var taskId = Date.now();
   var taskUrgency = false;
-  var newTaskObject = (obj);
-  newListArray.push(newTaskObject);
+  toDo = new ToDo(obj)
+  toDo.saveToStorage(newListArray);
+  console.log(localStorage)
   console.log(newListArray)
 }
 
 function deleteTask(e) {
-  console.log(e.target)
+  console.log('hi')
   var task = e.target.closest('.nav__div--tasks');
   var taskId = e.target.closest('.nav__div--tasks').getAttribute('data-id');
   task.remove();
 }
 
-function handleMakeList(e){
+function deleteList(e) {
+  var list = e.target.closest('.card__article');
+  var listId = e.target.closest('.card__article').getAttribute('data-id');
+  list.remove();
+}
+
+function handleMakeList(e) {
   e.preventDefault;
-  instantiateTask({id: Date.now(), title: newTaskTitle.value, tasks: newListArray, urgent: false});
+  appendCard();
+  // instantiateTask({id: Date.now(), title: newTaskTitle.value, tasks: newListArray, urgent: false});
   clearInputs();
 }
 
