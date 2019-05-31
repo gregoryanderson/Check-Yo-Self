@@ -1,46 +1,95 @@
-<head>
-  <title>Idea Box</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" media="screen" href="normalize.css">
-  <link rel="stylesheet" type="text/css" media="screen" href="styles.css">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-</head>
-<body>
-  <header>
-    <h1>Check <span>Yo'</span>Self</h1>
-    <img>
-    <input>
-  </header>
-  <nav>
-    <form>
-      <label></label>
-      <input>
-      <label></label>
-      <input>
-    </form>
-    <button>Make Task List</button>
-    <button>Clear</button>
-    <section>
-      <button>Filter By Urgency</button>
-    </section>
-  </nav>
-  <main>
-    <article>
-      <header> 
-        <h2>Task Title</h2>
-      </header>
-      <section>
-        <input>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Check Yo' Self</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="normalize.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,800&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <header class="header--logo">
+      <h1 class="header__h1--logo">Check <span class="header__span">Yo'</span>Self</h1>
+      <form class="header__form">
+        <img src="images/search.svg" class="header__img--search">
+        <input class="header__input--search" type="text" placeholder="Search">
+      </form>
+    </header>
+    <nav class="nav--whole">
+      <form class="nav__form">
+        <label for="nav__input--title" class="nav__label nav__label--title">Task Title</label>
+        <input class="nav__input nav__input--title" type="text">
+        <section class="nav__section--tasks">
+<!--           <div class="nav__div--tasks">
+          </div> -->
+        </section>
+        <label for="nav__input--item" class="nav__label nav__label--item">Task Item</label>
+        <section class="nav__section--lower">
+          <input class="nav__input nav__input--item" type="text">
+          <img src="images/plus.svg" class="nav__img--plus">
+        </section>
+      </form>
+      <button class="nav__btn nav__btn--list">Make Task List</button>
+      <button class="nav__btn nav__btn--clear">Clear</button>
+      <section class="nav__section--urgency">
+        <button class="nav__btn nav__btn--urgency">Filter By Urgency</button>
       </section>
-      <footer>
-        <img>
-        <p>Urgent</p>
-        <img>
-        <p>Delete</p>
-      </footer>
-    </article>
-  </main>
-</body>
-
+    </nav>
+    <main>
+      <article class="card__article">
+        <header class="card__header"> 
+          <h2 class="card__h2--title">Task Title</h2>
+        </header>
+        <section class="card__section">
+          <div class="card__div">
+            <input type=radio class="card__input--list">
+            <p class="card__p--task">Task One</p>
+          </div>
+          <div class="card__div">
+            <input type=radio class="card__input--list">
+            <p class="card__p--task">Task Two</p>
+          </div>
+        </section>
+        <footer class="card__footer">
+          <section class="card__section--left">
+            <img src="images/urgent.svg" class="card__img card__img--urgent">
+            <p class="card__p card__p--urgent">Urgent</p>
+          </section>
+          <section class="card__section--right">
+            <img src="images/delete.svg" class="card__img card__img--delete">
+            <p class="card__p card__p--delete">Delete</p>
+          </section>
+        </footer>
+      </article>
+          <article class="card__article">
+        <header class="card__header"> 
+          <h2 class="card__h2--title">Task Title</h2>
+        </header>
+        <section class="card__section">
+          <div class="card__div">
+            <input type=radio class="card__input--list">
+            <p class="card__p--task">Task One</p>
+          </div>
+          <div class="card__div">
+            <input type=radio class="card__input--list">
+            <p class="card__p--task">Task Two</p>
+          </div>
+        </section>
+        <footer class="card__footer">
+          <section class="card__section--left">
+            <img src="images/urgent.svg" class="card__img card__img--urgent">
+            <p class="card__p card__p--urgent">Urgent</p>
+          </section>
+          <section class="card__section--right">
+            <img src="images/delete.svg" class="card__img card__img--delete">
+            <p class="card__p card__p--delete">Delete</p>
+          </section>
+        </footer>
+      </article>
+    </main>
+  </body>
+  <!-- <script type="text/javascript" src="idea.js"></script> -->
+  <script type="text/javascript" src="main.js"></script>
+</html>
 
 
