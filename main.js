@@ -2,48 +2,68 @@ newTaskItem = document.querySelector('.nav__input--item');
 addTaskBtn = document.querySelector('.nav__img--plus');
 newTasksSection = document.querySelector('.nav__section--tasks');
 navWhole = document.querySelector('.nav--whole');
-newTaskTitle = document.querySelector('.nav__input-title');
+newTaskTitle = document.querySelector('.nav__input--title');
 makeListBtn = document.querySelector('.nav__btn--list');
+// deleteNewTask = document.querySelector('nav__img--delete')
 newListArray = [];
 
+newTaskItem.addEventListener('keyup', enableBtn);
+newTaskTitle.addEventListener('keyup', enableBtn);
 navWhole.addEventListener('click', listenOnNav);
+
+makeListBtn.disabled = true;
+
 
 function listenOnNav(e) {
   e.preventDefault();
   if (e.target === addTaskBtn){
     showNewTask();
   }
-  if (e.target === makeListBtn) {
+  if (e.target === makeListBtn){
     appendList();
+  }
+  if (e.target.className === 'nav__img--delete'){
+    deleteTask(e);
+  }
+}
+
+function enableBtn(event) {
+  if (this.value !== '') {
+    makeListBtn.disabled = false;
+  } else {
+    makeListBtn.disabled = true;
   }
 }
 
 function showNewTask() {
+  if (newTaskItem.value !== '' && newTaskTitle.value !== ''){
   var newTask = newTaskItem.value;
   var newTaskList = 
-    `<div data-id=Date.now() class="nav__div--tasks">
-      <input type="radio" class="nav__input--tasks">
+    `<article class="nav__div--tasks" data-id=Date.now()>
+      <img src="images/delete.svg" class="nav__img--delete">
       <p class="nav__p--tasks">${newTask}</p
-    </div>`;
+    </article>`;
   newTasksSection.insertAdjacentHTML('afterbegin', newTaskList);
   instantiateTask();
+  }
 }
 
 function instantiateTask () {
-
+  var taskTitle = newTaskTitle.value;
+  var taskToDo = newListArray; 
+  var taskId = Date.now();
+  var taskUrgency = false;
+  var newTaskObject = ({id: Date.now(), title: newTaskTitle.value, tasks: newListArray, urgent: false});
+  newListArray.push(newTaskObject);
+  console.log(newListArray)
 }
 
-
-function appendList() {
-  instantiateList();
+function deleteTask(e) {
+  console.log(e.target)
+  var task = e.target.closest('.nav__div--tasks');
+  var taskId = e.target.closest('.nav__div--tasks').getAttribute('data-id');
+  task.remove();
 }
-
-function handleSaveBtn(e) {
-  e.preventDefault();
-  instantiateIdea({id: Date.now(), title: titleInput.value, body: bodyInput.value, star: false, quality: 0});
-  clearInputs();
-}  
-
 
 // function appendCard(object) {
 //   var starState = object.star ? 'star-active.svg' : 'star.svg';
