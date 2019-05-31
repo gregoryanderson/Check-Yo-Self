@@ -2,11 +2,16 @@ newTaskItem = document.querySelector('.nav__input--item');
 addTaskBtn = document.querySelector('.nav__img--plus');
 newTasksSection = document.querySelector('.nav__section--tasks');
 navWhole = document.querySelector('.nav--whole');
-newTaskTitle = document.querySelector('.nav__input-title');
+newTaskTitle = document.querySelector('.nav__input--title');
 makeListBtn = document.querySelector('.nav__btn--list');
 newListArray = [];
 
+newTaskItem.addEventListener('keyup', enableBtn);
+newTaskTitle.addEventListener('keyup', enableBtn);
 navWhole.addEventListener('click', listenOnNav);
+
+makeListBtn.disabled = true;
+
 
 function listenOnNav(e) {
   e.preventDefault();
@@ -18,7 +23,16 @@ function listenOnNav(e) {
   }
 }
 
+function enableBtn(event) {
+  if (this.value !== '') {
+    makeListBtn.disabled = false;
+  } else {
+    makeListBtn.disabled = true;
+  }
+}
+
 function showNewTask() {
+  if (newTaskItem.value !== '' && newTaskTitle.value !== ''){
   var newTask = newTaskItem.value;
   var newTaskList = 
     `<div data-id=Date.now() class="nav__div--tasks">
@@ -27,22 +41,28 @@ function showNewTask() {
     </div>`;
   newTasksSection.insertAdjacentHTML('afterbegin', newTaskList);
   instantiateTask();
+  }
 }
 
 function instantiateTask () {
-
+  var taskTitle = newTaskTitle.value;
+  var taskToDo = newListArray; 
+  var taskId = Date.now();
+  var taskUrgency = false;
+  var newTaskObject = ({id: Date.now(), title: newTaskTitle.value, tasks: newListArray, urgent: false});
+  console.log(newTaskObject);
 }
 
 
-function appendList() {
-  instantiateList();
-}
+// function appendList() {
+//   instantiateList();
+// }
 
-function handleSaveBtn(e) {
-  e.preventDefault();
-  instantiateIdea({id: Date.now(), title: titleInput.value, body: bodyInput.value, star: false, quality: 0});
-  clearInputs();
-}  
+// function handleSaveBtn(e) {
+//   e.preventDefault();
+//   instantiateIdea({id: Date.now(), title: titleInput.value, body: bodyInput.value, star: false, quality: 0});
+//   clearInputs();
+// }  
 
 
 // function appendCard(object) {
