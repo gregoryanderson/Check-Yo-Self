@@ -9,8 +9,8 @@ body {
   'a a a'
   'b c c'
   'b c c';
-  grid-template-columns: 30% 35% 35%;
-  grid-template-rows: 10% 45% 45%;
+  grid-template-columns:30%  auto auto;
+  grid-template-rows: 100px auto auto;
 }
 
 .header--logo {
@@ -114,6 +114,7 @@ nav {
 
 .nav__section--urgency {
   border-top: 1px solid #1F1F3D;
+  height: 100vh
 }
 
 .nav__btn--urgency {
@@ -143,15 +144,16 @@ nav {
 
 main {
   grid-area:c;
-  /*display: grid;*/
+  columns: 2 45%;
+  column-gap: 1em;
 }
 
 .card__article {
-  border: 2px solid #C7D3D8;
-  width: 45%;
-  margin:10px;
-  background-color: #FAFDFF;
-  color:#1F1F3D;
+    border: 2px solid #C7D3D8;
+    /*width: 1fr;*/
+    margin:0 1em 1em 0;
+    background-color: #FAFDFF;
+    color:#1F1F3D;
 }
 
 .card__header {
