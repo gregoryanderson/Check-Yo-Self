@@ -18,13 +18,13 @@ makeListBtn.disabled = true;
 
 function listenOnNav(e) {
   e.preventDefault();
-  if (e.target === addTaskBtn){
+  if (e.target === addTaskBtn) {
     showNewTask();
   }
-  if (e.target === makeListBtn){
+  if (e.target === makeListBtn) {
     handleMakeList(e);
   }
-  if (e.target.className === 'nav__img--delete'){
+  if (e.target.className === 'nav__img--delete') {
     deleteTask(e);
   }
 }
@@ -32,7 +32,6 @@ function listenOnNav(e) {
 function listenOnMain(e) {
   e.preventDefault();
   if (e.target.id === 'card__img--delete') {
-  console.log('hey')
     deleteList(e);
   }
   if (e.target.id === 'card__img--urgent') {
@@ -40,7 +39,7 @@ function listenOnMain(e) {
   }
 }
 
-function enableBtn(event) {
+function enableBtn(e) {
   if (this.value !== '') {
     makeListBtn.disabled = false;
   } else {
@@ -126,6 +125,17 @@ function deleteList(e) {
   var list = e.target.closest('.card__article');
   var listId = e.target.closest('.card__article').getAttribute('data-id');
   list.remove();
+}
+
+function changeUrgency(e) {
+  urgencyUpdate = e.target;
+  activeUrgent = 'images/urgent-active.svg';
+  inactiveUrgent = 'images/urgent.svg'
+  if (e.target.src === activeUrgent){
+    e.target.src = inactiveUrgent;
+  } else {
+    e.target.src = activeUrgent;
+  }
 }
 
 function handleMakeList(e) {
