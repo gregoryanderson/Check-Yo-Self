@@ -4,9 +4,9 @@ newTasksSection = document.querySelector('.nav__section--tasks');
 navWhole = document.querySelector('.nav--whole');
 newTaskTitle = document.querySelector('.nav__input--title');
 makeListBtn = document.querySelector('.nav__btn--list');
-// deleteNewTask = document.querySelector('nav__img--delete')
 mainDisplay = document.querySelector('.card__main')
-newListArray = [];
+newListOfTasks = [];
+newListOfToDos = [];
 
 newTaskItem.addEventListener('keyup', enableBtn);
 newTaskTitle.addEventListener('keyup', enableBtn);
@@ -19,7 +19,7 @@ makeListBtn.disabled = true;
 function listenOnNav(e) {
   e.preventDefault();
   if (e.target === addTaskBtn) {
-    showNewTask();
+    pushNewTask(e);
   }
   if (e.target === makeListBtn) {
     handleMakeList(e);
@@ -39,6 +39,13 @@ function listenOnMain(e) {
   }
 }
 
+function handleMakeList(e) {
+  e.preventDefault;
+  var toDo = new ToDo ({id: Date.now(), title: newTaskTitle.value, tasks: newListOfTasks, urgent: false});
+  appendList(toDo);
+  clearInputs(e);
+}
+
 function enableBtn(e) {
   if (this.value !== '') {
     makeListBtn.disabled = false;
@@ -47,30 +54,64 @@ function enableBtn(e) {
   }
 }
 
-function clearInputs() {
+function clearInputs(e) {
+  if(e.target === addTaskBtn){
   newTaskItem.value = '';
-  newTaskTitle.value = '';
-}
+  }
 
-function showNewTask() {
-  if (newTaskItem.value !== '' && newTaskTitle.value !== ''){
-  var newTask = newTaskItem.value;
-  var newTaskList = 
-    `<article class="nav__div--tasks" data-id=Date.now()>
-      <img src="images/delete.svg" class="nav__img--delete">
-      <p class="nav__p--tasks">${newTask}</p
-    </article>`;
-  newTasksSection.insertAdjacentHTML('afterbegin', newTaskList);
-  newListArray.push(newTask);
-  console.log(newListArray)
-  // instantiateTask({id: Date.now(), title: newTaskTitle.value, tasks: newListArray, urgent: false});
-  clearInputs();
+  if(e.target === makeListBtn){
+  newTaskTitle.value = '';
+  newTaskItem.value = '';
   }
 }
 
-function appendCard(){
-  // newListArray.map(function(task){
-  // appendCard(task)
+function pushNewTask(e) {
+  if (newTaskItem.value !== '' && newTaskTitle.value !== ''){
+    var newTaskName = newTaskItem.value;
+    var task = new Task ({id: Date.now(), name: newTaskName});
+    newListOfTasks.push(task);
+    insertTask(e, task);
+    clearInputs(e);
+  }
+}
+
+function instantiateTask (obj) {
+  var taskTitle = obj.title;
+  var taskItem = obj.tasks;
+  var taskId = obj.id;
+  var taskUrgency = obj.urgent;
+  // toDo = new ToDo(obj)
+  // toDo.saveToStorage(newListArray);
+  // console.log(taskItem)
+  // console.log(obj)
+}
+
+  // insertTask();
+
+
+function insertTask(e, obj) {
+  // console.log(obj)
+  // newListArray.forEach(function(newTask){
+  //   console.log(obj)
+  var newTaskListItem = 
+    `<article class="nav__div--tasks" data-id=${obj.id}>
+      <img src="images/delete.svg" class="nav__img--delete">
+      <p class="nav__p--tasks">${obj.name}</p
+    </article>`;
+  newTasksSection.insertAdjacentHTML('afterbegin', newTaskListItem);
+  // })
+  clearInputs(e);
+}
+
+function appendList(obj){
+  console.log(obj.tasks)
+  console.log(obj.tasks.name)
+  newListOfTasks.forEach(function(obj){
+  var taskDisplay =  
+          `<div class="card__div">
+            <input type=radio class="card__input--list">
+            <p class="card__p--task">${obj.tasks}</p>
+          </div>`
   var newList =           
   `<article class="card__article">
         <header class="card__header"> 
@@ -81,10 +122,7 @@ function appendCard(){
             <input type=radio class="card__input--list">
             <p class="card__p--task">Task One</p>
           </div>
-          <div class="card__div">
-            <input type=radio class="card__input--list">
-            <p class="card__p--task">Task Two</p>
-          </div>
+          ${taskDisplay}
         </section>
         <footer class="card__footer">
           <section class="card__section--left">
@@ -98,24 +136,12 @@ function appendCard(){
         </footer>
       </article>`
     mainDisplay.insertAdjacentHTML('afterbegin', newList);
-  // })
+  })
 }
 
 
-function instantiateTask (obj) {
-  console.log(obj)
-  var taskTitle = newTaskTitle.value;
-  var taskItem = newTaskItem.value;
-  var taskId = Date.now();
-  var taskUrgency = false;
-  toDo = new ToDo(obj)
-  toDo.saveToStorage(newListArray);
-  console.log(localStorage)
-  console.log(newListArray)
-}
 
 function deleteTask(e) {
-  console.log('hi')
   var task = e.target.closest('.nav__div--tasks');
   var taskId = e.target.closest('.nav__div--tasks').getAttribute('data-id');
   task.remove();
@@ -138,26 +164,20 @@ function changeUrgency(e) {
   }
 }
 
-function handleMakeList(e) {
-  e.preventDefault;
-  appendCard();
-  // instantiateTask({id: Date.now(), title: newTaskTitle.value, tasks: newListArray, urgent: false});
-  clearInputs();
-}
 
 
-function instantiateIdea(obj) {
-  var ideaTitle = obj.title;
-  var ideaBody = obj.body; 
-  var ideaId = obj.id;
-  var ideaStar = obj.star
-  var ideaQuality = obj.quality;
-  //could be obj below
-  idea = new Idea({id: ideaId, title: ideaTitle, body: ideaBody, star: ideaStar, quality: ideaQuality});
-  ideaList.push(idea);
-  idea.saveToStorage(ideaList);
-  appendCard(idea);
-}
+// function instantiateIdea(obj) {
+//   var ideaTitle = obj.title;
+//   var ideaBody = obj.body; 
+//   var ideaId = obj.id;
+//   var ideaStar = obj.star
+//   var ideaQuality = obj.quality;
+//   //could be obj below
+//   idea = new Idea({id: ideaId, title: ideaTitle, body: ideaBody, star: ideaStar, quality: ideaQuality});
+//   ideaList.push(idea);
+//   idea.saveToStorage(ideaList);
+//   appendCard(idea);
+// }
 // function appendCard(object) {
 //   var starState = object.star ? 'star-active.svg' : 'star.svg';
 //   var ideaCard = `

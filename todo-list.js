@@ -1,5 +1,5 @@
 class ToDo {
-  constructor (obj){
+  constructor (obj) {
     this.id = obj.id;
     this.title = obj.title;
     this.tasks = obj.tasks;
@@ -7,7 +7,7 @@ class ToDo {
   }
 
   saveToStorage(globalArray) {
-    localStorage.setItem('tasks', JSON.stringify(globalArray));
+    localStorage.setItem('to-do-lists', JSON.stringify(globalArray));
   }
 
   deleteFromStorage() {
@@ -22,6 +22,13 @@ class ToDo {
 
   }
 
+}
+
+class Task {
+  constructor (obj) {
+    this.id = obj.id;
+    this.name = obj.name;
+  }
 }
 
 
