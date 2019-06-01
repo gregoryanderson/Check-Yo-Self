@@ -75,68 +75,46 @@ function pushNewTask(e) {
   }
 }
 
-function instantiateTask (obj) {
-  var taskTitle = obj.title;
-  var taskItem = obj.tasks;
-  var taskId = obj.id;
-  var taskUrgency = obj.urgent;
-  // toDo = new ToDo(obj)
-  // toDo.saveToStorage(newListArray);
-  // console.log(taskItem)
-  // console.log(obj)
-}
-
-  // insertTask();
-
-
 function insertTask(e, obj) {
-  // console.log(obj)
-  // newListArray.forEach(function(newTask){
-  //   console.log(obj)
   var newTaskListItem = 
     `<article class="nav__div--tasks" data-id=${obj.id}>
       <img src="images/delete.svg" class="nav__img--delete">
       <p class="nav__p--tasks">${obj.name}</p
     </article>`;
   newTasksSection.insertAdjacentHTML('afterbegin', newTaskListItem);
-  // })
   clearInputs(e);
 }
 
 function appendList(obj){
-  console.log(obj.tasks)
-  console.log(obj.tasks.name)
-  newListOfTasks.forEach(function(obj){
-  var taskDisplay =  
-          `<div class="card__div">
-            <input type=radio class="card__input--list">
-            <p class="card__p--task">${obj.tasks}</p>
-          </div>`
-  var newList =           
-  `<article class="card__article">
-        <header class="card__header"> 
-          <h2 class="card__h2--title">New Title</h2>
-        </header>
-        <section class="card__section">
-          <div class="card__div">
-            <input type=radio class="card__input--list">
-            <p class="card__p--task">Task One</p>
-          </div>
-          ${taskDisplay}
-        </section>
-        <footer class="card__footer">
-          <section class="card__section--left">
-            <img src="images/urgent.svg" class="card__img card__img--urgent" id="card__img--urgent">
-            <p class="card__p card__p--urgent">Urgent</p>
+  var taskDisplay = '';
+  obj.tasks.forEach(function(task){
+    //cant be var task display
+    taskDisplay = taskDisplay + 
+            `<div class="card__div">
+              <input type=radio class="card__input--list">
+              <p class="card__p--task">${task.name}</p>
+            </div>`
+    })
+    var newList =           
+    `<article class="card__article">
+          <header class="card__header"> 
+            <h2 class="card__h2--title">New Title</h2>
+          </header>
+          <section class="card__section">
+            ${taskDisplay}
           </section>
-          <section class="card__section--right">
-            <img src="images/delete.svg" class="card__img card__img--delete" id="card__img--delete">
-            <p class="card__p card__p--delete">Delete</p>
-          </section>
-        </footer>
-      </article>`
-    mainDisplay.insertAdjacentHTML('afterbegin', newList);
-  })
+          <footer class="card__footer">
+            <section class="card__section--left">
+              <img src="images/urgent.svg" class="card__img card__img--urgent" id="card__img--urgent">
+              <p class="card__p card__p--urgent">Urgent</p>
+            </section>
+            <section class="card__section--right">
+              <img src="images/delete.svg" class="card__img card__img--delete" id="card__img--delete">
+              <p class="card__p card__p--delete">Delete</p>
+            </section>
+          </footer>
+        </article>`
+      mainDisplay.insertAdjacentHTML('afterbegin', newList);
 }
 
 
