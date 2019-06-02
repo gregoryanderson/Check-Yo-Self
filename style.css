@@ -171,8 +171,10 @@ main {
   height:200px;
 }
 
-.card__input--list {
-  margin:10px;
+.card__img--checkbox {
+  margin: 10px;
+  height: 1em;
+  width: 1em;
 }
 
 .card__section {

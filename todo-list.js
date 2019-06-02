@@ -29,6 +29,10 @@ class Task {
     this.id = obj.id;
     this.name = obj.name;
   }
+
+  saveToStorage(globalArray){
+  localStorage.setItem('tasks', JSON.stringify(globalArray));
+  }
 }
 
 

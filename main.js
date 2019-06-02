@@ -4,7 +4,8 @@ newTasksSection = document.querySelector('.nav__section--tasks');
 navWhole = document.querySelector('.nav--whole');
 newTaskTitle = document.querySelector('.nav__input--title');
 makeListBtn = document.querySelector('.nav__btn--list');
-mainDisplay = document.querySelector('.card__main')
+mainDisplay = document.querySelector('.card__main');
+clearBtn = document.querySelector('.nav__btn--clear');
 newListOfTasks = [];
 newListOfToDos = [];
 
@@ -27,6 +28,12 @@ function listenOnNav(e) {
   if (e.target.className === 'nav__img--delete') {
     deleteTask(e);
   }
+  if (e.target === clearBtn){
+    // clearInputs(e);
+    //maybe forEach.pop?
+    console.log(newTasksSection);
+    newTasksSection = 'b';
+  }
 }
 
 function listenOnMain(e) {
@@ -37,11 +44,17 @@ function listenOnMain(e) {
   if (e.target.id === 'card__img--urgent') {
     changeUrgency(e);
   }
+
+  if (e.target.id === 'card__img--checkbox') {
+    checkboxToggle(e)
+  }
 }
 
 function handleMakeList(e) {
   e.preventDefault;
   var toDo = new ToDo ({id: Date.now(), title: newTaskTitle.value, tasks: newListOfTasks, urgent: false});
+  newListOfToDos.push(toDo);
+  toDo.saveToStorage(newListOfToDos)
   appendList(toDo);
   clearInputs(e);
 }
@@ -59,6 +72,7 @@ function clearInputs(e) {
   newTaskItem.value = '';
   }
 
+  //adding clear button a problem here for some reason
   if(e.target === makeListBtn){
   newTaskTitle.value = '';
   newTaskItem.value = '';
@@ -70,6 +84,7 @@ function pushNewTask(e) {
     var newTaskName = newTaskItem.value;
     var task = new Task ({id: Date.now(), name: newTaskName});
     newListOfTasks.push(task);
+    task.saveToStorage(newListOfTasks);
     insertTask(e, task);
     clearInputs(e);
   }
@@ -91,7 +106,7 @@ function appendList(obj){
     //cant be var task display
     taskDisplay = taskDisplay + 
             `<div class="card__div">
-              <input type=radio class="card__input--list">
+              <img src="images/checkbox.svg" class="card__img--checkbox" id="card__img--checkbox">
               <p class="card__p--task">${task.name}</p>
             </div>`
     })
@@ -131,16 +146,38 @@ function deleteList(e) {
   list.remove();
 }
 
+function checkboxToggle(e){
+  updateCheckbox = e.target;
+  unchecked = 'images/checkbox.svg';
+  checked = 'images/checkbox-active.svg';
+  if (e.target=== unchecked){
+    console.log('this isnt done')
+  }
+}
+
 function changeUrgency(e) {
+  console.log('hey')
   urgencyUpdate = e.target;
   activeUrgent = 'images/urgent-active.svg';
   inactiveUrgent = 'images/urgent.svg'
   if (e.target.src === activeUrgent){
     e.target.src = inactiveUrgent;
-  } else {
+    console.log('1')
+  }
+  if (e.target.src === inactiveUrgent){
     e.target.src = activeUrgent;
+    console.log('2')
   }
 }
+
+function reloadLists() {
+var newWorkingLists = JSON.parse(localStorage.getItem('to-do-lists')) || [];
+ newWorkingLists.map(function(object) {
+   instantiateIdea(object);
+ });
+ hideIdeaCue();
+}
+
 
 
 
