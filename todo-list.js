@@ -10,8 +10,13 @@ class ToDo {
     localStorage.setItem('to-do-lists', JSON.stringify(globalArray));
   }
 
-  deleteFromStorage() {
-
+  deleteFromStorage(taskId) {
+    console.log('hey')
+    var deleteToDoArray = newListOfToDos.filter(function(item) {
+      return item.id !== parseInt(taskId);
+    });
+    newListOfToDos = deleteToDoArray;
+    this.saveToStorage(newListOfToDos);
   }
 
   updateToDo() {

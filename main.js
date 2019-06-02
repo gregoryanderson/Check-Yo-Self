@@ -111,9 +111,9 @@ function appendList(obj){
             </div>`
     })
     var newList =           
-    `<article class="card__article">
+    `<article class="card__article" data-id=${obj.id}>
           <header class="card__header"> 
-            <h2 class="card__h2--title">New Title</h2>
+            <h2 class="card__h2--title">${obj.title}</h2>
           </header>
           <section class="card__section">
             ${taskDisplay}
@@ -141,9 +141,17 @@ function deleteTask(e) {
 }
 
 function deleteList(e) {
-  var list = e.target.closest('.card__article');
-  var listId = e.target.closest('.card__article').getAttribute('data-id');
-  list.remove();
+  var toDoCard = e.target.closest('.card__article');
+  var toDoId = toDoCard.getAttribute('data-id');
+  toDoCard.remove();
+  findToDo(toDoId).deleteFromStorage(toDoId);
+}
+
+function findToDo(toDoId){
+  var toDo = newListOfToDos.find(function(toDo){
+    return toDo.id == toDoId;
+  })
+  return toDo
 }
 
 function checkboxToggle(e){
@@ -156,29 +164,40 @@ function checkboxToggle(e){
 }
 
 function changeUrgency(e) {
-  console.log('hey')
   urgencyUpdate = e.target;
   activeUrgent = 'images/urgent-active.svg';
   inactiveUrgent = 'images/urgent.svg'
   if (e.target.src === activeUrgent){
     e.target.src = inactiveUrgent;
-    console.log('1')
   }
   if (e.target.src === inactiveUrgent){
     e.target.src = activeUrgent;
-    console.log('2')
   }
 }
 
 function reloadLists() {
-var newWorkingLists = JSON.parse(localStorage.getItem('to-do-lists')) || [];
- newWorkingLists.map(function(object) {
-   instantiateIdea(object);
- });
- hideIdeaCue();
+  var newWorkingLists = JSON.parse(localStorage.getItem('to-do-lists')) || [];
+  newWorkingLists.forEach(function(object) {
+    rebuildToDo(object);
+  })
 }
 
+function rebuildToDo(toDoObject) {
+  var toDo = new ToDo (toDoObject);
+  rebuildTasks(toDo);
+  appendList(toDo)
+  newListOfToDos.push(toDo);
+}
 
+function rebuildTasks(toDo) {
+  for (i = 0; i < toDo.tasks.length; i++){
+    toDo.tasks[i]= new Task(toDo.tasks[i])
+  }
+}
+
+window.onload = function() {
+  reloadLists();
+}
 
 
 // function instantiateIdea(obj) {
