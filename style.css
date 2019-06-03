@@ -189,7 +189,7 @@ main {
   width:100%;
 }
 
-.card__p--task {
+.card__p--false {
   margin:10px;
   color: #1F1F3D;
 }
@@ -233,7 +233,9 @@ main {
   background-color: #FFE89D;
 }
 
-.card__p--italics {
+.card__p--true {
+  margin:10px;
   font-style: italic;
+  color:#3C6577;
 }
 

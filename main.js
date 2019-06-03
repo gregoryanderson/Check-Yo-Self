@@ -45,7 +45,7 @@ function listenOnNav(e) {
 function listenOnMain(e) {
   e.preventDefault();
   if (e.target.id === 'card__img--delete') {
-    deleteList(e);
+    targetCardForDeletion(e);
   }
   if (e.target.id === 'card__img--urgent') {
     triggerUrgency(e);
@@ -109,23 +109,13 @@ function insertTask(e, obj) {
 
 function appendList(obj){
   var urgentState = obj.urgent ? 'urgent-active.svg' : 'urgent.svg';
-  // seeIfChecked(obj)
-  var checkedState = obj.checked ? 'checkbox-active.svg' : 'checkbox.svg';
-  var taskDisplay = '';
-  obj.tasks.forEach(function(task){
-    taskDisplay = taskDisplay + 
-            `<div class="card__div" data-id=${task.id}>
-              <img src="images/${checkedState}" class="card__img--checkbox" id="card__img--checkbox">
-              <p class="card__p--task">${task.name}</p>
-            </div>`
-    })
     var newList =           
     `<article class="card__article" data-id=${obj.id}>
           <header class="card__header"> 
             <h2 class="card__h2--title">${obj.title}</h2>
           </header>
           <section class="card__section">
-            ${taskDisplay}
+            ${appendTaskInCard(obj)}
           </section>
           <footer class="card__footer">
             <section class="card__section--left">
@@ -142,19 +132,20 @@ function appendList(obj){
       hideIdeaCue();
 }
 
-// function seeIfChecked(obj){
-//   for (i = 0; i > obj.tasks.)
-// }
-
-
-
-
-
-
+function appendTaskInCard(toDo) {
+  var taskList = '';
+  for (var i = 0; i < toDo.tasks.length; i++){
+    taskList += 
+    `
+      <div class="card__div" data-id=${toDo.tasks[i].id}>
+        <img class="card__img--checkbox" src=${toDo.tasks[i].checked ? 'images/checkbox-active.svg' : 'images/checkbox.svg'} alt="Delete task from card" id="card__img--checkbox"/>
+        <p class="card__p--${toDo.tasks[i].checked}">${toDo.tasks[i].name}</p>
+      </div>
+      `
+  } return taskList;
+}
 
 function deleteTask(e) {
-  var task = e.target.closest('.nav__article--tasks');
-  var taskId = e.target.closest('.nav__article--tasks').getAttribute('data-id');
   task.remove();
   taskIndex = findNavTaskIndex(taskId)
   newListOfTasks.splice(taskIndex, 1)
@@ -163,14 +154,26 @@ function deleteTask(e) {
 function deleteList(e) {
   var toDoCard = e.target.closest('.card__article');
   var toDoId = toDoCard.getAttribute('data-id');
-  enableDltBtn(e, toDoId);
-}
-
-function enableDltBtn(e, toDoId) {
-
   toDoCard.remove();
   findToDo(toDoId).deleteFromStorage(toDoId);
   hideIdeaCue();
+}
+
+function targetCardForDeletion(e) {
+  var index = findToDoIndex(e);
+  enableDltBtn(e, index);
+}
+
+function enableDltBtn(e, index) {
+  var deleteObj = newListOfToDos[index].tasks;
+  var newArray = deleteObj.filter(function(tasks) {
+  return tasks.checked === true;
+}); 
+  if (newArray.length === deleteObj.length) {
+    deleteList(e);
+  } else {
+    alert('Please complete all tasks before deleting ToDo list! - You can do it!')
+  }
 }
 
 function findToDo(toDoId) {
@@ -193,15 +196,9 @@ function checkboxToggle (e, toDoIndex, taskIndex) {
 }
 
 function addStyle(e, toDoIndex, taskIndex) {
-  var taskName = newListOfToDos[toDoIndex].tasks[taskIndex].name;
   var taskNameClass = e.target.nextElementSibling;
-  if (newListOfToDos[toDoIndex].tasks[taskIndex].checked === true) {
-    taskNameClass.style.color = '#3C6577';
-    taskNameClass.style.fontStyle = 'italic';
-  } else {
-    taskNameClass.style.color = '#1F1F3D';
-    taskNameClass.style.fontStyle = 'normal';
-  }
+  taskNameClass.classList.toggle('card__p--true');
+  taskNameClass.classList.toggle('card__p--false');
 }
 
 function triggerCheckbox(e) {
