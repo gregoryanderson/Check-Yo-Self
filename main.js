@@ -109,8 +109,9 @@ function insertTask(e, obj) {
 
 function appendList(obj){
   var urgentState = obj.urgent ? 'urgent-active.svg' : 'urgent.svg';
+  var urgentClass = obj.urgent ? 'card__article urgent' : 'card__article';
     var newList =           
-    `<article class="card__article" data-id=${obj.id}>
+    `<article class="${urgentClass}" data-id="${obj.id}">
           <header class="card__header"> 
             <h2 class="card__h2--title">${obj.title}</h2>
           </header>
@@ -219,14 +220,22 @@ function urgencyToggle(e, toDoIndex) {
   } else {
     urgencyTarget.src = activeUrgent;
   };
+  urgencyCardToggle(e, toDoIndex);
+}
+
+function urgencyCardToggle(e, toDoIndex) {
+  list = e.target.closest('.card__article');
+  list.classList.toggle('urgent')
 }
 
 function triggerUrgency(e) {
   var toDoIndex = findToDoIndex(e)
   newListOfToDos[toDoIndex].urgent = !newListOfToDos[toDoIndex].urgent;
   newListOfToDos[toDoIndex].updateToDo(newListOfToDos[toDoIndex].urgent)
-  urgencyToggle(e, toDoIndex)
+  urgencyToggle(e, toDoIndex);
 }
+
+
 
 function findToDoIndex(e){
   var listId = e.target.closest('.card__article').getAttribute('data-id');
