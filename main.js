@@ -6,15 +6,20 @@ newTaskTitle = document.querySelector('.nav__input--title');
 makeListBtn = document.querySelector('.nav__btn--list');
 mainDisplay = document.querySelector('.card__main');
 clearBtn = document.querySelector('.nav__btn--clear');
+noTask = document.querySelector('.card__div--statement');
+searchBar = document.querySelector('.header__input--search');
+urgencyFilterBtn = document.querySelector('.nav__btn--urgency');
 newListOfTasks = [];
 newListOfToDos = [];
 
 newTaskItem.addEventListener('keyup', enableBtn);
 newTaskTitle.addEventListener('keyup', enableBtn);
 navWhole.addEventListener('click', listenOnNav);
-mainDisplay.addEventListener('click', listenOnMain)
+mainDisplay.addEventListener('click', listenOnMain);
+searchBar.addEventListener('keyup', searchThru);
 
 makeListBtn.disabled = true;
+clearBtn.disabled = true;
 
 
 function listenOnNav(e) {
@@ -29,10 +34,11 @@ function listenOnNav(e) {
     deleteTask(e);
   }
   if (e.target === clearBtn){
-    // clearInputs(e);
-    //maybe forEach.pop?
-    console.log(newTasksSection);
-    newTasksSection = 'b';
+    clearInputs(e);
+    resetTaskArray();
+  }
+  if (e.target === urgencyFilterBtn){
+    filterByUrgency();
   }
 }
 
@@ -42,17 +48,17 @@ function listenOnMain(e) {
     deleteList(e);
   }
   if (e.target.id === 'card__img--urgent') {
-    changeUrgency(e);
+    triggerUrgency(e);
   }
 
   if (e.target.id === 'card__img--checkbox') {
-    checkboxToggle(e)
+    triggerCheckbox(e)
   }
 }
 
 function handleMakeList(e) {
   e.preventDefault;
-  var toDo = new ToDo ({id: Date.now(), title: newTaskTitle.value, tasks: newListOfTasks, urgent: false});
+  var toDo = new ToDoList ({id: Date.now(), title: newTaskTitle.value, tasks: newListOfTasks, urgent: false});
   newListOfToDos.push(toDo);
   toDo.saveToStorage(newListOfToDos)
   appendList(toDo);
@@ -62,27 +68,28 @@ function handleMakeList(e) {
 function enableBtn(e) {
   if (this.value !== '') {
     makeListBtn.disabled = false;
+    clearBtn.disabled = false;
   } else {
     makeListBtn.disabled = true;
+    clearBtn.disabled = true;
   }
 }
 
 function clearInputs(e) {
   if(e.target === addTaskBtn){
   newTaskItem.value = '';
-  }
-
-  //adding clear button a problem here for some reason
-  if(e.target === makeListBtn){
+  } else {
   newTaskTitle.value = '';
   newTaskItem.value = '';
+  newTasksSection.innerHTML = '';
+  newListOfTasks = [];
   }
 }
 
 function pushNewTask(e) {
   if (newTaskItem.value !== '' && newTaskTitle.value !== ''){
     var newTaskName = newTaskItem.value;
-    var task = new Task ({id: Date.now(), name: newTaskName});
+    var task = new Task ({id: Date.now(), name: newTaskName, checked: false});
     newListOfTasks.push(task);
     task.saveToStorage(newListOfTasks);
     insertTask(e, task);
@@ -92,7 +99,7 @@ function pushNewTask(e) {
 
 function insertTask(e, obj) {
   var newTaskListItem = 
-    `<article class="nav__div--tasks" data-id=${obj.id}>
+    `<article class="nav__article--tasks" data-id=${obj.id}>
       <img src="images/delete.svg" class="nav__img--delete">
       <p class="nav__p--tasks">${obj.name}</p
     </article>`;
@@ -101,12 +108,14 @@ function insertTask(e, obj) {
 }
 
 function appendList(obj){
+  var urgentState = obj.urgent ? 'urgent-active.svg' : 'urgent.svg';
+  // seeIfChecked(obj)
+  var checkedState = obj.checked ? 'checkbox-active.svg' : 'checkbox.svg';
   var taskDisplay = '';
   obj.tasks.forEach(function(task){
-    //cant be var task display
     taskDisplay = taskDisplay + 
-            `<div class="card__div">
-              <img src="images/checkbox.svg" class="card__img--checkbox" id="card__img--checkbox">
+            `<div class="card__div" data-id=${task.id}>
+              <img src="images/${checkedState}" class="card__img--checkbox" id="card__img--checkbox">
               <p class="card__p--task">${task.name}</p>
             </div>`
     })
@@ -120,7 +129,7 @@ function appendList(obj){
           </section>
           <footer class="card__footer">
             <section class="card__section--left">
-              <img src="images/urgent.svg" class="card__img card__img--urgent" id="card__img--urgent">
+              <img src="images/${urgentState}" class="card__img card__img--urgent" id="card__img--urgent">
               <p class="card__p card__p--urgent">Urgent</p>
             </section>
             <section class="card__section--right">
@@ -130,49 +139,116 @@ function appendList(obj){
           </footer>
         </article>`
       mainDisplay.insertAdjacentHTML('afterbegin', newList);
+      hideIdeaCue();
 }
+
+// function seeIfChecked(obj){
+//   for (i = 0; i > obj.tasks.)
+// }
+
+
+
+
 
 
 
 function deleteTask(e) {
-  var task = e.target.closest('.nav__div--tasks');
-  var taskId = e.target.closest('.nav__div--tasks').getAttribute('data-id');
+  var task = e.target.closest('.nav__article--tasks');
+  var taskId = e.target.closest('.nav__article--tasks').getAttribute('data-id');
   task.remove();
+  taskIndex = findNavTaskIndex(taskId)
+  newListOfTasks.splice(taskIndex, 1)
 }
 
 function deleteList(e) {
   var toDoCard = e.target.closest('.card__article');
   var toDoId = toDoCard.getAttribute('data-id');
+  enableDltBtn(e, toDoId);
+}
+
+function enableDltBtn(e, toDoId) {
+
   toDoCard.remove();
   findToDo(toDoId).deleteFromStorage(toDoId);
+  hideIdeaCue();
 }
 
-function findToDo(toDoId){
-  var toDo = newListOfToDos.find(function(toDo){
+function findToDo(toDoId) {
+  var foundToDo = newListOfToDos.find(function(toDo) {
     return toDo.id == toDoId;
   })
-  return toDo
+  return foundToDo;
 }
 
-function checkboxToggle(e){
-  updateCheckbox = e.target;
+function checkboxToggle (e, toDoIndex, taskIndex) {
+  checkboxTarget = e.target;
   unchecked = 'images/checkbox.svg';
   checked = 'images/checkbox-active.svg';
-  if (e.target=== unchecked){
-    console.log('this isnt done')
+  if (newListOfToDos[toDoIndex].tasks[taskIndex].checked === false) {
+    checkboxTarget.src = unchecked;
+  } else {
+    checkboxTarget.src = checked;
+  };
+  addStyle(e, toDoIndex, taskIndex)
+}
+
+function addStyle(e, toDoIndex, taskIndex) {
+  var taskName = newListOfToDos[toDoIndex].tasks[taskIndex].name;
+  var taskNameClass = e.target.nextElementSibling;
+  if (newListOfToDos[toDoIndex].tasks[taskIndex].checked === true) {
+    taskNameClass.style.color = '#3C6577';
+    taskNameClass.style.fontStyle = 'italic';
+  } else {
+    taskNameClass.style.color = '#1F1F3D';
+    taskNameClass.style.fontStyle = 'normal';
   }
 }
 
-function changeUrgency(e) {
-  urgencyUpdate = e.target;
+function triggerCheckbox(e) {
+  var toDoIndex = findToDoIndex(e);
+  var taskIndex = findTaskIndex(e, toDoIndex);
+  newListOfToDos[toDoIndex].tasks[taskIndex].checked = !newListOfToDos[toDoIndex].tasks[taskIndex].checked;
+  var checkboxStatus = newListOfToDos[toDoIndex].tasks[taskIndex].checked;
+  newListOfToDos[toDoIndex].updateTask(taskIndex, checkboxStatus);
+  checkboxToggle(e, toDoIndex, taskIndex);
+}
+
+function urgencyToggle(e, toDoIndex) {
+  urgencyTarget = e.target;
   activeUrgent = 'images/urgent-active.svg';
-  inactiveUrgent = 'images/urgent.svg'
-  if (e.target.src === activeUrgent){
-    e.target.src = inactiveUrgent;
-  }
-  if (e.target.src === inactiveUrgent){
-    e.target.src = activeUrgent;
-  }
+  inactiveUrgent = 'images/urgent.svg';
+  if (newListOfToDos[toDoIndex].urgent === false) {
+    urgencyTarget.src = inactiveUrgent;
+  } else {
+    urgencyTarget.src = activeUrgent;
+  };
+}
+
+function triggerUrgency(e) {
+  var toDoIndex = findToDoIndex(e)
+  newListOfToDos[toDoIndex].urgent = !newListOfToDos[toDoIndex].urgent;
+  newListOfToDos[toDoIndex].updateToDo(newListOfToDos[toDoIndex].urgent)
+  urgencyToggle(e, toDoIndex)
+}
+
+function findToDoIndex(e){
+  var listId = e.target.closest('.card__article').getAttribute('data-id');
+  return newListOfToDos.findIndex(function(item){
+    return item.id === parseInt(listId)
+  })
+}
+
+function findTaskIndex(e, toDoIndex){
+  var taskId = e.target.closest('.card__div').getAttribute('data-id');
+  return newListOfToDos[toDoIndex].tasks.findIndex(function(item){
+    return item.id === parseInt(taskId)
+  })
+}
+
+function findNavTaskIndex(taskId) {
+  return newListOfTasks.findIndex(function(item){
+    return item.id === parseInt(taskId)
+  })
 }
 
 function reloadLists() {
@@ -180,10 +256,11 @@ function reloadLists() {
   newWorkingLists.forEach(function(object) {
     rebuildToDo(object);
   })
+  hideIdeaCue();
 }
 
 function rebuildToDo(toDoObject) {
-  var toDo = new ToDo (toDoObject);
+  var toDo = new ToDoList (toDoObject);
   rebuildTasks(toDo);
   appendList(toDo)
   newListOfToDos.push(toDo);
@@ -195,42 +272,37 @@ function rebuildTasks(toDo) {
   }
 }
 
+function hideIdeaCue() {
+  if (newListOfToDos.length > 0) {
+    noTask.classList.add("hidden");
+  }
+  if (newListOfToDos.length < 1) {
+    noTask.classList.remove("hidden")
+  }
+}
+
+function searchThru(e) {
+  var searchInput = e.target.value.toLowerCase();
+  var results = newListOfToDos.filter(function(toDo){
+    return toDo.title.toLowerCase().includes(searchInput)
+     // || toDo.tasks.toLowerCase().includes(searchInput);  
+  });
+  mainDisplay.innerHTML = '';
+  results.map(function(toDo){
+    appendList(toDo)
+  });
+}
+
+function filterByUrgency(){
+  var results = newListOfToDos.filter(function(toDo){
+    return toDo.urgent === true;
+  })
+  mainDisplay.innerHTML = '';
+  results.map(function(toDo){
+    appendList(toDo)
+  })
+}
+
 window.onload = function() {
   reloadLists();
 }
-
-
-// function instantiateIdea(obj) {
-//   var ideaTitle = obj.title;
-//   var ideaBody = obj.body; 
-//   var ideaId = obj.id;
-//   var ideaStar = obj.star
-//   var ideaQuality = obj.quality;
-//   //could be obj below
-//   idea = new Idea({id: ideaId, title: ideaTitle, body: ideaBody, star: ideaStar, quality: ideaQuality});
-//   ideaList.push(idea);
-//   idea.saveToStorage(ideaList);
-//   appendCard(idea);
-// }
-// function appendCard(object) {
-//   var starState = object.star ? 'star-active.svg' : 'star.svg';
-//   var ideaCard = `
-//   <article class="card" data-id="${object.id}">
-//         <header>
-//           <img src="images/${starState}" class="card__img--card card__img--star" id="card__img--star"> 
-//           <img src="images/delete.svg" class="delete">
-//         </header>
-//         <div class="card__main--card">
-//           <h2 class="card__h2--title card__text" contenteditable>${object.title}</h2>
-//           <p class="card__p--body card__text" contenteditable>${object.body}</p>
-//         </div>
-//         <footer>
-//           <img src="images/upvote.svg" class="card__img--card" id="card__img--upvote">
-//           <p class="card__footer--quality">Quality: <span class="card__span--quality">${qualityList[object.quality]}</span></p>
-//           <img src="images/downvote.svg" class="card__img--card" id="card__img--downvote">
-//         </footer>
-//       </article>`
-//       ;  
-//   display.insertAdjacentHTML('afterbegin', ideaCard);
-//   hideIdeaCue();
-// }

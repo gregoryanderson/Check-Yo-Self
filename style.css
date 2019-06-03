@@ -121,7 +121,7 @@ nav {
   margin-top: 20px;
 }
 
-.nav__div--tasks {
+.nav__article--tasks {
   display: inline-flex;
   width:100%;
   margin: 10px;
@@ -144,16 +144,18 @@ nav {
 
 main {
   grid-area:c;
-  columns: 2 45%;
+  columns: 2;
   column-gap: 1em;
 }
 
 .card__article {
-    border: 2px solid #C7D3D8;
-    /*width: 1fr;*/
-    margin:0 1em 1em 0;
-    background-color: #FAFDFF;
-    color:#1F1F3D;
+  border: 2px solid #C7D3D8;
+  width: 100%;
+  margin:0 1em 1em 0;
+  background-color: #FAFDFF;
+  color:#1F1F3D;
+  break-inside: avoid;
+  min-height:120px;
 }
 
 .card__header {
@@ -168,7 +170,7 @@ main {
 }
 
 .card__section {
-  height:200px;
+  /*height:200px;*/
 }
 
 .card__img--checkbox {
@@ -210,9 +212,28 @@ main {
   margin: 5px;
 }
 
+.card__div--statement {
+  height: 200px;
+  /*width: 45%;*/
+  margin: 20px;
+  border: 1px dotted black;
+  font-size: 1em;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  break-inside: avoid;
+}
+
+.hidden {
+  display:none;
+}
+
 .urgent {
   border: 2px solid #FFC30C;
   background-color: #FFE89D;
 }
 
+.card__p--italics {
+  font-style: italic;
+}
 
