@@ -113,6 +113,7 @@ function insertTask(e, obj) {
 function appendList(obj){
   var urgentState = obj.urgent ? 'urgent-active.svg' : 'urgent.svg';
   var urgentClass = obj.urgent ? 'card__article urgent' : 'card__article';
+  var urgentPara = obj.urgent ? 'card__p card__p--urgent' : 'card__p'
     var newList =           
     `<article class="${urgentClass}" data-id="${obj.id}">
           <header class="card__header"> 
@@ -122,14 +123,14 @@ function appendList(obj){
             ${appendTaskInCard(obj)}
           </section>
           <footer class="card__footer">
-            <section class="card__section--left">
+            <div class="card__section--left">
               <img src="images/${urgentState}" class="card__img card__img--urgent" id="card__img--urgent">
-              <p class="card__p card__p--urgent">Urgent</p>
-            </section>
-            <section class="card__section--right">
+              <p class="${urgentPara}">URGENT</p>
+            </div>
+            <div class="card__section--right">
               <img src="images/delete.svg" class="card__img card__img--delete" id="card__img--delete">
-              <p class="card__p card__p--delete">Delete</p>
-            </section>
+              <p class="card__p card__p--delete">DELETE</p>
+            </div>
           </footer>
         </article>`
       mainDisplay.insertAdjacentHTML('afterbegin', newList);
@@ -232,7 +233,7 @@ function urgencyCardToggle(e, toDoIndex) {
   list = e.target.closest('.card__article');
   paragraph = e.target.nextElementSibling;
   list.classList.toggle('urgent');
-  paragraph.classList.toggle('urgent');
+  paragraph.classList.toggle('card__p--urgent');
 }
 
 function triggerUrgency(e) {

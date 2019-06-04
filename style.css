@@ -172,6 +172,7 @@ main {
 }
 
 .card__header {
+  border-bottom: 2px solid #C7D3D8; 
   height: 40px;
 }
 
@@ -194,7 +195,7 @@ main {
 
 .card__section {
   display: block;
-  border-top: 2px solid #C7D3D8;  
+  border-bottom: 2px solid #C7D3D8;  
 }
 
 .card__div {
@@ -211,7 +212,6 @@ main {
   height: 60px;
   display: flex;
   justify-content: space-between;
-  border-top: 2px solid #C7D3D8; 
   color: #3C6577; 
 }
 
@@ -222,7 +222,8 @@ main {
 }
 
 .card__p {
-  margin: 5px;
+  margin: 6px;
+  font-size: .75em;
 }
 
 .card__div--statement {
@@ -242,6 +243,18 @@ main {
 .urgent {
   border: 2px solid #FFC30C;
   background-color: #FFE89D;
+}
+
+/*.urgent header {
+  border-bottom: 2px solid #FFC30C;
+}*/
+
+.urgent header,
+.urgent section {
+  border-bottom: 2px solid #FFC30C;
+}
+
+.card__p--urgent {
   color: #B23A25;
 }
 
@@ -273,16 +286,24 @@ main {
 }
 
 .header__form{
-  width:100%;
-  margin: 20px 0 20px -20px;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-right: 0;
+  margin-left: 10px;
 }
 
 .header--logo {
   display: block;
 }
 
+.header__h1--logo {
+  text-align: center;
+}
+
 .header__input--search {
-  width:80%;
+  width:82%;
 }
 
 .header__img--search {
@@ -290,5 +311,5 @@ main {
 }
 
 .nav__section--urgency {
-  height:20vh;
+  height:10vh;
 }
