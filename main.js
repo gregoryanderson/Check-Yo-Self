@@ -57,12 +57,15 @@ function listenOnMain(e) {
 }
 
 function handleMakeList(e) {
+  if(newListOfTasks.length !== 0)
   e.preventDefault;
   var toDo = new ToDoList ({id: Date.now(), title: newTaskTitle.value, tasks: newListOfTasks, urgent: false});
   newListOfToDos.push(toDo);
   toDo.saveToStorage(newListOfToDos)
   appendList(toDo);
   clearInputs(e);
+  makeListBtn.disabled = true;
+  clearBtn.disabled = true;
 }
 
 function enableBtn(e) {
@@ -147,6 +150,8 @@ function appendTaskInCard(toDo) {
 }
 
 function deleteTask(e) {
+  var task = e.target.closest('.nav__article--tasks');
+  var taskId = task.getAttribute('data-id')
   task.remove();
   taskIndex = findNavTaskIndex(taskId)
   newListOfTasks.splice(taskIndex, 1)
@@ -225,7 +230,9 @@ function urgencyToggle(e, toDoIndex) {
 
 function urgencyCardToggle(e, toDoIndex) {
   list = e.target.closest('.card__article');
-  list.classList.toggle('urgent')
+  paragraph = e.target.nextElementSibling;
+  list.classList.toggle('urgent');
+  paragraph.classList.toggle('urgent');
 }
 
 function triggerUrgency(e) {
@@ -234,8 +241,6 @@ function triggerUrgency(e) {
   newListOfToDos[toDoIndex].updateToDo(newListOfToDos[toDoIndex].urgent)
   urgencyToggle(e, toDoIndex);
 }
-
-
 
 function findToDoIndex(e){
   var listId = e.target.closest('.card__article').getAttribute('data-id');

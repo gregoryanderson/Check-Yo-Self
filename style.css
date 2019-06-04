@@ -10,17 +10,20 @@ body {
   'b c c'
   'b c c';
   grid-template-columns:30%  auto auto;
-  grid-template-rows: 100px auto auto;
+  grid-template-rows: 70px auto auto;
 }
 
 .header--logo {
   background-color: #1F1F3D;
-  /*height: 10vh;*/
   color: white;
   font-weight: 800;
   display: flex;
   justify-content: space-between;
   grid-area:a;
+}
+
+header h1 {
+  margin:20px 20px 20px;
 }
 
 .header__span {
@@ -38,15 +41,16 @@ body {
   height: 40px;
   width: 40px;
   padding:10px;
-  background-color: #C8d3d9;
+  background-color: #C8D3D9;
   display: inline-flex;
-  border-radius: 5px 0 0 5px;
+  border-radius: 2px 0 0 2px;
 }
 
 .header__input--search {
   height: 40px;
   display: inline-flex;
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 2px 2px 0;
+  padding:10px;
 }
 
 nav {
@@ -67,7 +71,7 @@ nav {
 .nav__input {
   width: 90%;
   padding:10px;
-  border-radius: 5px;
+  border-radius: 2px;
   border: 2px solid #1F1F3D;
 }
 
@@ -78,7 +82,7 @@ nav {
 }
 
 .nav__input--item {
-  border-radius: 5px 0 0 5px;
+  border-radius: 2px 0 0 2px;
   width:80%;
 }
 
@@ -88,12 +92,14 @@ nav {
   padding: 1%;
   background-color: #1F1F3D;
   display: inline-flex;
-  border-radius: 0 5px 5px 0;
+  border-radius: 0 2px 2px 0;
 }
 
 .nav__label {
   margin-top: 20px;
-  color: #F3F6F7;
+  margin-bottom:7px;
+  font-weight: 400; 
+  color: #C8D3D9;
 }
 
 .nav__btn {
@@ -102,10 +108,16 @@ nav {
   width: 90%;
   padding: 10px;
   margin-left: 10px;
-  border-radius: 5px;
+  border-radius: 2px;
   border:none;
   margin-top: 15px;
   font-weight: 800;
+}
+
+.nav__btn:disabled {
+  background-color: #C8D3D9;
+  border:2px solid #1F1F3D;
+  color:#1F1F3D;
 }
 
 .nav__btn--clear {
@@ -215,7 +227,6 @@ main {
 
 .card__div--statement {
   height: 200px;
-  margin: 20px;
   border: 1px dotted black;
   font-size: 1em;
   text-align: center;
@@ -231,6 +242,7 @@ main {
 .urgent {
   border: 2px solid #FFC30C;
   background-color: #FFE89D;
+  color: #B23A25;
 }
 
 .card__p--true {
@@ -241,4 +253,42 @@ main {
 
 .search__filter {
   background-color: #EF4A23;
+}
+
+
+@media screen and (max-width: 600px) {
+
+body {
+  display: grid;
+  grid-template-areas: 
+  'a'
+  'b'
+  'c';
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+}
+
+main {
+  columns: 1;
+}
+
+.header__form{
+  width:100%;
+  margin: 20px 0 20px -20px;
+}
+
+.header--logo {
+  display: block;
+}
+
+.header__input--search {
+  width:80%;
+}
+
+.header__img--search {
+  width:10%;
+}
+
+.nav__section--urgency {
+  height:20vh;
 }

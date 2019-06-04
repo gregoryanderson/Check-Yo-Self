@@ -27,7 +27,6 @@ class ToDoList {
     this.tasks[taskIndex].checked = checked;
     this.saveToStorage(newListOfToDos)
   }
-
 }
 
 class Task {
@@ -42,6 +41,8 @@ class Task {
   }
 }
 
+//text length in input
+//nextelement sibling
 //search tasks
 //disabled button colors
 //CSS on completed tasks
@@ -50,3 +51,6 @@ class Task {
 //The “Delete” button should only be enabled if all of the tasks on the checklist have been checked off.
 //Upon clicking the “Delete” button, the appropriate todo list should be removed from the DOM.
 //color of the inside of the delete button
+//delete task from nav
+//targeting sibling for itals
+//max length
