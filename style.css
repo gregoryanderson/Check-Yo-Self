@@ -146,6 +146,7 @@ main {
   grid-area:c;
   columns: 2;
   column-gap: 1em;
+  margin: 1em;
 }
 
 .card__article {
@@ -238,3 +239,6 @@ main {
   color:#3C6577;
 }
 
+.search__filter {
+  background-color: #EF4A23;
+}

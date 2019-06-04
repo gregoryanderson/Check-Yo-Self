@@ -38,7 +38,7 @@ function listenOnNav(e) {
     resetTaskArray();
   }
   if (e.target === urgencyFilterBtn){
-    filterByUrgency();
+    filterByUrgency(e);
   }
 }
 
@@ -299,14 +299,22 @@ function searchThru(e) {
   });
 }
 
-function filterByUrgency(){
-  var results = newListOfToDos.filter(function(toDo){
-    return toDo.urgent === true;
-  })
-  mainDisplay.innerHTML = '';
-  results.map(function(toDo){
-    appendList(toDo)
-  })
+function filterByUrgency(e){
+  e.target.classList.toggle('search__filter')
+  if (e.target.classList.contains('search__filter')) {
+    var results = newListOfToDos.filter(function(toDo){
+      return toDo.urgent === true;
+    })
+    mainDisplay.innerHTML = '';
+    results.map(function(toDo){
+      appendList(toDo)
+    })
+  } else {
+      mainDisplay.innerHTML = '';
+      newListOfToDos.map(function(toDo){
+        appendList(toDo)
+    })
+  }
 }
 
 window.onload = function() {
