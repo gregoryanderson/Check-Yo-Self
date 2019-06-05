@@ -4,7 +4,7 @@ CheckYo'Self is a orginizational app that I built in Module 1 during my time at 
 
 Contributor: Gregory Anderson 
 
-
+[Link to CheckYo'Self!](https://gregoryanderson.github.io/Check-Yo-Self/)
 
 
 Comparison Images:
@@ -16,7 +16,6 @@ Desktop and Mobile Layout Model:
 ![check-yo-self-04](https://user-images.githubusercontent.com/30326085/58932302-75688c80-8720-11e9-815c-9ef99f66beb3.jpg)
 
 Desktop and Mobile Layout Completed:
-![Full Layout Completed](https://user-images.githubusercontent.com/30326085/58932331-8ca77a00-8720-11e9-949e-dcb777c1632e.png)
-
+![Round2](https://user-images.githubusercontent.com/30326085/58932647-c331c480-8721-11e9-9653-40950f18f915.png)
 
 ![screencapture-file-Users-gregoryanderson-mod1-checkYoSelf-index-html-2019-06-04-23_06_18](https://user-images.githubusercontent.com/30326085/58932360-ab0d7580-8720-11e9-9181-38101b5b660d.png)
