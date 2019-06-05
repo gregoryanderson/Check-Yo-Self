@@ -70,7 +70,7 @@ function handleMakeList(e) {
 }
 
 function enableBtn(enable = true) {
-  if (enable) {
+  if (enable && newListOfTasks.length > 0) {
     makeListBtn.disabled = false;
     clearBtn.disabled = false;
   } else {
@@ -82,6 +82,7 @@ function enableBtn(enable = true) {
 function clearInputs(e) {
   if(e.target === addTaskBtn){
     newTaskItem.value = '';
+    enableBtn(true)
   } else {
     newTaskTitle.value = '';
     newTaskItem.value = '';
@@ -129,6 +130,9 @@ function appendList(obj){
           <img src="images/${urgentState}" class="card__img card__img--urgent" alt="urgency button" id="card__img--urgent">
           <p class="${urgentPara}">URGENT</p>
         </div>
+        <div class="card__delete--issue hidden">
+          <p>Please Complete All Tasks!</p>
+        </div>
         <div class="card__section--right">
           <img src="images/delete.svg" class="card__img card__img--delete" alt="delete button" id="card__img--delete">
           <p class="card__p card__p--delete">DELETE</p>
@@ -143,7 +147,7 @@ function appendTaskInCard(toDo) {
   var taskList = '';
   for (var i = 0; i < toDo.tasks.length; i++){
     taskList += 
-    `<div class="card__div" data-id=${toDo.tasks[i].id}>
+     `<div class="card__div" data-id=${toDo.tasks[i].id}>
         <img class="card__img--checkbox" src=${toDo.tasks[i].checked ? 'images/checkbox-active.svg' : 'images/checkbox.svg'} alt="Delete task from card" id="card__img--checkbox"/>
         <p class="card__p--${toDo.tasks[i].checked}">${toDo.tasks[i].name}</p>
       </div>`
@@ -157,7 +161,7 @@ function deleteTask(e) {
   task.remove();
   taskIndex = findNavTaskIndex(taskId)
   newListOfTasks.splice(taskIndex, 1)
-  enableBtn(false)
+  enableBtn()
 }
 
 function deleteList(e) {
@@ -181,8 +185,13 @@ function enableDltBtn(e, index) {
   if (newArray.length === deleteObj.length) {
     deleteList(e);
   } else {
-    alert('All Tasks Must Be Complete!')
+    deleteProblem(e, index)
   }
+}
+
+function deleteProblem(e, index) {
+  var card = e.target.closest('.card__article');
+  card.children[2].children[1].classList.remove('hidden')
 }
 
 function findToDo(toDoId) {
@@ -325,5 +334,4 @@ function filterByUrgency(e){
 
 window.onload = function() {
   reloadLists();
-  // var toDo = new ToDo ()
 }

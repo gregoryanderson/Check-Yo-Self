@@ -52,7 +52,7 @@ body {
 
 .header__input--search {
   border-radius: 0 2px 2px 0;
-  box-shadow: none;
+  border: none;
 }
 
 nav {
@@ -242,6 +242,10 @@ main {
   justify-content: center;
   text-align: center;
   color: #C8D3D9;
+}
+
+.card__delete--issue {
+  color: #B23A25;
 }
 
 .hidden {
