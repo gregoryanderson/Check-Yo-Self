@@ -57,19 +57,20 @@ function listenOnMain(e) {
 }
 
 function handleMakeList(e) {
-  if(newListOfTasks.length !== 0)
-  e.preventDefault;
-  var toDo = new ToDoList ({id: Date.now(), title: newTaskTitle.value, tasks: newListOfTasks, urgent: false});
-  newListOfToDos.push(toDo);
-  toDo.saveToStorage(newListOfToDos)
-  appendList(toDo);
-  clearInputs(e);
-  makeListBtn.disabled = true;
-  clearBtn.disabled = true;
+  if(newListOfTasks.length !== 0){
+    e.preventDefault;
+    var toDo = new ToDoList ({id: Date.now(), title: newTaskTitle.value, tasks: newListOfTasks, urgent: false});
+    newListOfToDos.push(toDo);
+    toDo.saveToStorage(newListOfToDos)
+    appendList(toDo);
+    clearInputs(e);
+    makeListBtn.disabled = true;
+    clearBtn.disabled = true;
+  }
 }
 
-function enableBtn(e) {
-  if (this.value !== '') {
+function enableBtn(enable = true) {
+  if (enable) {
     makeListBtn.disabled = false;
     clearBtn.disabled = false;
   } else {
@@ -80,12 +81,13 @@ function enableBtn(e) {
 
 function clearInputs(e) {
   if(e.target === addTaskBtn){
-  newTaskItem.value = '';
+    newTaskItem.value = '';
   } else {
-  newTaskTitle.value = '';
-  newTaskItem.value = '';
-  newTasksSection.innerHTML = '';
-  newListOfTasks = [];
+    newTaskTitle.value = '';
+    newTaskItem.value = '';
+    newTasksSection.innerHTML = '';
+    newListOfTasks = [];
+    enableBtn(false)
   }
 }
 
@@ -103,7 +105,7 @@ function pushNewTask(e) {
 function insertTask(e, obj) {
   var newTaskListItem = 
     `<article class="nav__article--tasks" data-id=${obj.id}>
-      <img src="images/delete.svg" class="nav__img--delete">
+      <img src="images/delete.svg" alt="completed or not" class="nav__img--delete">
       <p class="nav__p--tasks">${obj.name}</p
     </article>`;
   newTasksSection.insertAdjacentHTML('afterbegin', newTaskListItem);
@@ -114,40 +116,39 @@ function appendList(obj){
   var urgentState = obj.urgent ? 'urgent-active.svg' : 'urgent.svg';
   var urgentClass = obj.urgent ? 'card__article urgent' : 'card__article';
   var urgentPara = obj.urgent ? 'card__p card__p--urgent' : 'card__p'
-    var newList =           
-    `<article class="${urgentClass}" data-id="${obj.id}">
-          <header class="card__header"> 
-            <h2 class="card__h2--title">${obj.title}</h2>
-          </header>
-          <section class="card__section">
-            ${appendTaskInCard(obj)}
-          </section>
-          <footer class="card__footer">
-            <div class="card__section--left">
-              <img src="images/${urgentState}" class="card__img card__img--urgent" id="card__img--urgent">
-              <p class="${urgentPara}">URGENT</p>
-            </div>
-            <div class="card__section--right">
-              <img src="images/delete.svg" class="card__img card__img--delete" id="card__img--delete">
-              <p class="card__p card__p--delete">DELETE</p>
-            </div>
-          </footer>
-        </article>`
-      mainDisplay.insertAdjacentHTML('afterbegin', newList);
-      hideIdeaCue();
+  var newList =           
+   `<article class="${urgentClass}" data-id="${obj.id}">
+      <header class="card__header"> 
+        <h2 class="card__h2--title">${obj.title}</h2>
+      </header>
+      <section class="card__section">
+        ${appendTaskInCard(obj)}
+      </section>
+      <footer class="card__footer">
+        <div class="card__section--left">
+          <img src="images/${urgentState}" class="card__img card__img--urgent" alt="urgency button" id="card__img--urgent">
+          <p class="${urgentPara}">URGENT</p>
+        </div>
+        <div class="card__section--right">
+          <img src="images/delete.svg" class="card__img card__img--delete" alt="delete button" id="card__img--delete">
+          <p class="card__p card__p--delete">DELETE</p>
+        </div>
+      </footer>
+    </article>`
+  mainDisplay.insertAdjacentHTML('afterbegin', newList);
+  hideIdeaCue();
 }
 
 function appendTaskInCard(toDo) {
   var taskList = '';
   for (var i = 0; i < toDo.tasks.length; i++){
     taskList += 
-    `
-      <div class="card__div" data-id=${toDo.tasks[i].id}>
+    `<div class="card__div" data-id=${toDo.tasks[i].id}>
         <img class="card__img--checkbox" src=${toDo.tasks[i].checked ? 'images/checkbox-active.svg' : 'images/checkbox.svg'} alt="Delete task from card" id="card__img--checkbox"/>
         <p class="card__p--${toDo.tasks[i].checked}">${toDo.tasks[i].name}</p>
-      </div>
-      `
-  } return taskList;
+      </div>`
+  } 
+  return taskList;
 }
 
 function deleteTask(e) {
@@ -156,6 +157,7 @@ function deleteTask(e) {
   task.remove();
   taskIndex = findNavTaskIndex(taskId)
   newListOfTasks.splice(taskIndex, 1)
+  enableBtn(false)
 }
 
 function deleteList(e) {
@@ -175,17 +177,17 @@ function enableDltBtn(e, index) {
   var deleteObj = newListOfToDos[index].tasks;
   var newArray = deleteObj.filter(function(tasks) {
   return tasks.checked === true;
-}); 
+  }) 
   if (newArray.length === deleteObj.length) {
     deleteList(e);
   } else {
-    alert('Please complete all tasks before deleting ToDo list! - You can do it!')
+    alert('All Tasks Must Be Complete!')
   }
 }
 
 function findToDo(toDoId) {
   var foundToDo = newListOfToDos.find(function(toDo) {
-    return toDo.id == toDoId;
+  return toDo.id == toDoId;
   })
   return foundToDo;
 }
@@ -198,7 +200,7 @@ function checkboxToggle (e, toDoIndex, taskIndex) {
     checkboxTarget.src = unchecked;
   } else {
     checkboxTarget.src = checked;
-  };
+  }
   addStyle(e, toDoIndex, taskIndex)
 }
 
@@ -287,20 +289,18 @@ function rebuildTasks(toDo) {
 function hideIdeaCue() {
   if (newListOfToDos.length > 0) {
     noTask.classList.add("hidden");
-  }
-  if (newListOfToDos.length < 1) {
+  } else {
     noTask.classList.remove("hidden")
   }
 }
 
 function searchThru(e) {
   var searchInput = e.target.value.toLowerCase();
-  var results = newListOfToDos.filter(function(toDo){
+  var results = newListOfToDos.filter(function(toDo) {
     return toDo.title.toLowerCase().includes(searchInput)
-     // || toDo.tasks.toLowerCase().includes(searchInput);  
   });
   mainDisplay.innerHTML = '';
-  results.map(function(toDo){
+  results.map(function(toDo) {
     appendList(toDo)
   });
 }
@@ -325,4 +325,5 @@ function filterByUrgency(e){
 
 window.onload = function() {
   reloadLists();
+  // var toDo = new ToDo ()
 }

@@ -2,7 +2,7 @@ class ToDoList {
   constructor (obj) {
     this.id = obj.id;
     this.title = obj.title;
-    this.tasks = obj.tasks;
+    this.tasks = obj.tasks || [];
     this.urgent = obj.urgent;
   }
 
@@ -41,16 +41,8 @@ class Task {
   }
 }
 
-//text length in input
-//nextelement sibling
+//boxshadow
 //search tasks
-//disabled button colors
 //CSS on completed tasks
-//css on urgency
 //remove task from global array
-//The “Delete” button should only be enabled if all of the tasks on the checklist have been checked off.
-//Upon clicking the “Delete” button, the appropriate todo list should be removed from the DOM.
-//color of the inside of the delete button
-//delete task from nav
-//targeting sibling for itals
-//max length
+//adding cards with no input after deletion 

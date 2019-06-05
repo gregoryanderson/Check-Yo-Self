@@ -12,18 +12,18 @@
       <h1 class="header__h1--logo">CHECK <span class="header__span">YO'</span>SELF</h1>
       <form class="header__form">
         <img src="images/search.svg" alt="seach bar" class="header__img--search">
-        <input class="header__input--search" type="text" placeholder="Search">
+        <input class="header__input--search" type="text" placeholder="Search" maxlength="20">
       </form>
     </header>
     <nav class="nav--whole">
       <form class="nav__form">
         <label for="nav__input--title" class="nav__label nav__label--title">Task Title</label>
-        <input class="nav__input nav__input--title" type="text">
+        <input class="nav__input nav__input--title" maxlength="20" type="text">
         <section class="nav__section--tasks">
         </section>
         <label for="nav__input--item" class="nav__label nav__label--item">Task Item</label>
         <section class="nav__section--lower">
-          <input class="nav__input nav__input--item" type="text">
+          <input class="nav__input nav__input--item" maxlength="20" type="text">
           <img src="images/plus.svg" alt="add a task" class="nav__img--plus">
         </section>
       </form>
